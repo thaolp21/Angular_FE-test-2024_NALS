@@ -74,12 +74,12 @@
                             can't be
                             empty</small>
                     </div>
-                    <div class="flex flex-column gap-2">
+                    <div class="flex flex-column max-h-15rem">
                         <label htmlFor="content">Content</label>
-                        <textarea
+                        <textarea class="overflow-scroll"
                             [class]="getFormBlogControl(FORM_BLOG_NAME.CONTENT).invalid ? 'ng-invalid ng-dirty' : ''"
-                            rows="5" cols="30" pInputTextarea [formControlName]="FORM_BLOG_NAME.CONTENT"
-                            [autoResize]="true"></textarea>
+                            class="max-h-20rem overflow-scroll" rows="5" cols="30" pInputTextarea
+                            [formControlName]="FORM_BLOG_NAME.CONTENT" [autoResize]="true"></textarea>
                         <small *ngIf="getFormBlogControl(FORM_BLOG_NAME.CONTENT).invalid"
                             class="font-italic text-red-500">Content can't
                             be empty</small>

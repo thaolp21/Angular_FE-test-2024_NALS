@@ -73,7 +73,6 @@ export class BlogPageComponent implements OnInit {
     this.firstPage = 0
     this.getData(this.paginator)
   }
-
   getData(paginator: Paginator) {
     this.loading = true
     const param = this.handleParam(paginator)
@@ -121,7 +120,9 @@ export class BlogPageComponent implements OnInit {
       const formData = new FormData()
       const values = this.blogFromGroup.getRawValue()
       for (const key in values) {
-        formData.append(`blog[${key}]`, values[key])
+        if (values[key]) {
+          formData.append(`blog[${key}]`, values[key])
+        }
       }
       this.blogService[functionName](formData, this.currentIdItem!).pipe(
         catchError((err) => {
@@ -132,7 +133,8 @@ export class BlogPageComponent implements OnInit {
         this.visible = false
         if (res?.data?.id) {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: `${message} blog successful!` });
-          this.getData(this.paginator)
+          this.searchFormGroup.reset()
+          this.search()
         }
       })
     }

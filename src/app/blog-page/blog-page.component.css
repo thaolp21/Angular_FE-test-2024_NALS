@@ -1,0 +1,4 @@
+input[required]+label:after {
+    content: '*';
+    color: red;
+}

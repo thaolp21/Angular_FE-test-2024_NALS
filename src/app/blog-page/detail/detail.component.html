@@ -1,0 +1,33 @@
+<div class="container p-4">
+    <div class="breadcumb card block w-full mb-4">
+        <p-breadcrumb class="max-w-full" [home]="homeBreadcumbIcon" [model]="detailBreadcumbIcons" />
+    </div>
+    <div *ngIf="detailBlog" class="h-screen">
+        <p-card [style]="{ width: '100%', heigh: '100%'}" class="h-screen text-center">
+            <ng-template pTemplate="header">
+                <img [alt]="detailBlog.title" [src]="detailBlog.image?.url" [style]="{'max-width': '70%'}" />
+            </ng-template>
+            <ng-template pTemplate="title">
+                {{detailBlog.title}}
+            </ng-template>
+            <ng-template pTemplate="subtitle">
+                <div class="grid flex-column">
+                    <div class="grid gap-4">
+                        <p><span class="font-bold">ID:</span> {{id}}</p>
+                        <p><span class="font-bold">Comments:</span> {{detailBlog.comments_count}}</p>
+
+                        <p><span class="font-bold">Created at:</span> {{detailBlog.created_at | date}}</p>
+                        <p><span class="font-bold">Updated at</span> {{detailBlog.updated_at | date}}</p>
+
+                    </div>
+                </div>
+
+
+            </ng-template>
+
+            <p>
+                {{detailBlog.content}}
+            </p>
+        </p-card>
+    </div>
+</div>

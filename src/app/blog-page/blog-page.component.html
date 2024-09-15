@@ -1,0 +1,108 @@
+<ng-container *ngIf="!loading; else skeleton">
+    <div class="card">
+        <p-toast></p-toast>
+        <div class="grid gap-2 align-items-center justify-content-between p-2">
+            <form [formGroup]="searchFormGroup" (submit)="search()" class="flex-grow-1">
+                <div class="flex gap-2 align-items-center justify-content-between p-2">
+
+                    <div class="flex gap-1 flex-none">
+
+                        <p-dropdown [formControlName]="FORM_SEARCH_NAME.SORT_BY" [options]="sortByList"
+                            placeholder="Sort By" class="flex-grow-1" [showClear]="true"></p-dropdown>
+                        <p-toggleButton [formControlName]="FORM_SEARCH_NAME.SORT_DIRECTION"
+                            offIcon="pi pi-sort-amount-down" onIcon='pi
+                        pi-sort-amount-up'></p-toggleButton>
+                    </div>
+                    <div class="p-input-icon-right flex-grow-1">
+                        <i class="pi pi-search"></i>
+                        <input class="w-full" type="text" pInputText [formControlName]="FORM_SEARCH_NAME.SEARCH" />
+                    </div>
+                    <p-button type="submit" class="flex-none" [outlined]="true" [raised]="true">Search</p-button>
+                </div>
+            </form>
+
+            <p-button icon="pi pi-plus" label="Create" (click)="showDialog()"></p-button>
+        </div>
+
+        <p-dataView #dv [value]="items">
+            <ng-template let-item pTemplate="listItem">
+                <div class="col-12">
+                    <div class="flex flex-column md:flex-row md:align-items-start p-4 gap-4">
+                        <div class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto">
+                            <img class="w-full" [src]="item.image.url" [alt]="item.title" />
+                        </div>
+                        <div
+                            class="flex flex-column md:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                            <div
+                                class="flex flex-column justify-content-between align-items-center md:align-items-start flex-1 gap-1">
+                                <div class="text-xl font-bold text-900">
+                                    <a [routerLink]="['blogs/detail', item.id]">{{
+                                        item.title }}</a>
+                                </div>
+                                <span class="my-1 text-sm">updated at: {{item.updated_at | date}}</span>
+                                <p class="my-2">
+                                    {{item.content}}
+                                </p>
+                            </div>
+
+                            <div>
+                                <p-button (click)="showDialog(item)" icon="pi pi-user-edit" label="Edit"></p-button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </ng-template>
+        </p-dataView>
+
+        <p-dialog *ngIf="visible" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
+            [breakpoints]="{ '960px': '75vw' }" [draggable]="false" [resizable]="false">
+            <ng-template pTemplate="header">
+                <span class="text-xl font-bold">{{getFormBlogControl(FORM_BLOG_NAME.TITLE).getRawValue() ||
+                    'Title'}}</span>
+            </ng-template>
+            <form [formGroup]="blogFromGroup" (submit)="updateBlog()">
+                <div class="flex flex-column gap-2 ">
+                    <div class="flex flex-column gap-2">
+                        <label htmlFor="title">Title</label>
+                        <input pInputText required id="title" type="text" class="w-full"
+                            [class]="getFormBlogControl(FORM_BLOG_NAME.TITLE).invalid ? 'ng-invalid ng-dirty' : ''"
+                            [formControlName]="FORM_BLOG_NAME.TITLE" />
+                        <small *ngIf="getFormBlogControl(FORM_BLOG_NAME.TITLE).invalid"
+                            class="font-italic text-red-500">Title
+                            can't be
+                            empty</small>
+                    </div>
+                    <div class="flex flex-column gap-2">
+                        <label htmlFor="content">Content</label>
+                        <textarea
+                            [class]="getFormBlogControl(FORM_BLOG_NAME.CONTENT).invalid ? 'ng-invalid ng-dirty' : ''"
+                            rows="5" cols="30" pInputTextarea [formControlName]="FORM_BLOG_NAME.CONTENT"
+                            [autoResize]="true"></textarea>
+                        <small *ngIf="getFormBlogControl(FORM_BLOG_NAME.CONTENT).invalid"
+                            class="font-italic text-red-500">Content can't
+                            be empty</small>
+                    </div>
+                    <div class="flex gap-2 align-items-center">
+                        <label htmlFor="content">Upload image: </label>
+                        <p-fileUpload mode="basic" chooseLabel="Choose" accept="image/*" [maxFileSize]="100000"
+                            (onSelect)="onUpload($event)"></p-fileUpload>
+
+                    </div>
+
+                </div>
+                <p-button type="submit" label="Submit" styleClass="p-button-text mt-2 text-right"></p-button>
+
+            </form>
+
+
+        </p-dialog>
+
+        <p-paginator (onPageChange)="onPageChange($event)" [first]="firstPage" [rows]="paginator.offset"
+            [totalRecords]="paginator.count || 0" [showFirstLastIcon]="false"></p-paginator>
+    </div>
+</ng-container>
+<ng-template #skeleton>
+    <app-skeleton></app-skeleton>
+</ng-template>
